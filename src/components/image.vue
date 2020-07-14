@@ -1,11 +1,18 @@
 <template>
   <div class="container">
-      <h3 class="mb-4 mt-4">PERSONNALISER L'IMAGE</h3>
+      <h3 class="mb-4 mt-4">PERSONNALISER VOTRE IMAGE</h3>
 
-      <img :style="{borderStyle: style, borderColor: couleur, borderWidth: borderheight + 'px' , opacity: transparance, width: width+'px', height: height+'px'}"  src="https://tong.visitkorea.or.kr/cms/resource_etc/44/2593244_image_1.jpg" />
-
+      <img v-if="urlImg != '' " :style="{borderStyle: style, borderColor: couleur, borderWidth: borderheight+'px' , opacity: transparance, width: width+sizeChoix, height: height+'px'}"  :src="urlImg" />
+      <h2 v-else class="imgempty"> Selectionner une image </h2>
       <hr style="background-color: rgba(0, 0, 255, 0.541); height: 2px;">
       <div role="modify image">
+            <div class="form-group row">
+              <label for="inputEmail3" class="col-sm-2 col-form-label">Link de l'image</label>
+              <div class="col-sm-3">
+                <input type="url" class="form-control" id="inputEmail3"  v-model="urlImg" placeholder="httt://image.com" >
+        
+              </div>
+            </div>
             <div class="form-group row">
               <label for="inputEmail3" class="col-sm-2 col-form-label">Transparence</label>
               <div class="col-sm-3">
@@ -14,10 +21,14 @@
               </div>
             </div>
             <div class="form-group row">
-              <label for="inputPassword3" class="col-sm-2 col-form-label">Width</label>
+              <label for="inputPassword3" class="col-sm-2 col-form-label">Width <br>
+              <input type="radio" v-model="sizeChoix" value="px" name="size"> px
+              <input class="ml-3" v-model="sizeChoix" type="radio" value="%" name="size"> %
+              </label>
               <div class="col-sm-3">
-                <input type="range" class="form-control" id="inputEmail3" min="50" max="800" value="200" v-model="width" >
-                <span>{{ width }} px</span> 
+                <input v-if="sizeChoix == 'px' " type="range" class="form-control" id="inputEmail3" min="50" max="800" value="200" v-model="width" >
+                <input v-else type="range" class="form-control" id="inputEmail3" min="5" max="100" value="5" v-model="width" >
+                <span>{{ width+sizeChoix }} </span> 
               </div>
             </div>
             <div class="form-group row">
@@ -132,8 +143,36 @@
                 </div>
               </fieldset>
             </div>  
-        </div>
-  
+            <button class="btn btn-info" @click="sourceTrue">Voir code source</button>
+
+            <div class="container mt-4 mb-4 source" v-if="source" >
+              <div class="card" style="width: 18rem;background-color: aquamarine;">                
+                <div class="card-body" >
+                  <div class="code_link">   
+                    <span @click="sourceFalse" style="position: absolute; right: 10px; top: 10px; cursor: pointer;">X</span>                                    
+                    <h4>Html</h4>                                        
+                      <xmp>&ltimg class="image" src="{{urlImg}}" /></xmp>
+                    </div>                    
+                </div>
+              </div>              
+              <div class="card" style="width: 18rem; background-color: rgba(127, 255, 212, 0.425);">
+                  <div class="card-body">
+                    <div class="code_link">                       
+                      <h4>Css</h4>
+                      <div id="css_copy">
+                        .image{
+                          <div class="ml-4">
+                            <span v-if="transparance > 0" >opacity: {{ transparance }};</span><br>
+                            <span>width: {{ width+sizeChoix }};</span><br>
+                            <span>border: {{borderheight + ' ' + style + ' ' + couleur  }};</span>
+                          </div>
+                      }
+                      </div>                
+                  </div>
+                </div>
+              </div> 
+            </div> 
+      </div>
 </template>
 
 
@@ -147,18 +186,54 @@ export default{
 
         data(){
             return{
+                urlImg: '',
                 transparance: 1,
-                width: 200,
+                sizeChoix: 'px',
+                width: 0,
                 height: 200,
                 style: 'none',
                 borderheight: 1,
-                couleur: 'black'
-  
-
+                couleur: 'black',
+                source: false,
             }
+        },
+
+        methods:{
+          sourceTrue(){
+            this.source = true
+          },
+          sourceFalse(){
+            this.source = false
+          },
         }
         
     }
 
 
 </script>
+
+<style scoped>
+  .imgempty{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: rgba(128, 128, 128, 0.493);
+    text-align: center;
+  }
+
+  .code_link{
+    overflow: hidden;
+  }
+  
+  .code_link button{
+    position: absolute;
+    right: 10px;
+    background-image: url('https://cdn.icon-icons.com/icons2/931/PNG/512/copy_paste_icon-icons.com_72426.png');
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+  }
+
+
+
+
+
+</style>
