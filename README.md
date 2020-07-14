@@ -1,4 +1,4 @@
-# axios-projet
+# Projet vuejs
 
 ## Project setup
 ```
