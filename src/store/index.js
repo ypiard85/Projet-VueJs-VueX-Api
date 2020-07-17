@@ -38,13 +38,6 @@ export default new Vuex.Store({
 
     STATUS_CHANGE(state, articleItems){
       articleItems.acheter = !articleItems.acheter
-    },
-
-    //MURATION EXPRESS
-    CURRENT_USER_FETCH(state, user){
-      state.user = user.id,
-      state.email = user.email,
-      state.username = user.username 
     }
   },
 
